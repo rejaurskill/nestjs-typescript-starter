@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ProductsService } from './products.service.js';
 
 @Controller('products')
@@ -6,13 +14,22 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
   @Get()
   getProducts() {
-    const products = this.productsService.getProducts();
+    return {
+      success: true,
+      data: this.productsService.getProducts(),
+    };
+  }
+
+  @Get(':id')
+  getProduct(@Param('id') id: string) {
+    const product = this.productsService.getProduct(Number(id));
 
     return {
       success: true,
-      data: products,
+      data: product,
     };
   }
+
   @Post()
   createProduct(@Body() body: { name: string }) {
     const product = this.productsService.createProduct(body);
@@ -20,6 +37,22 @@ export class ProductsController {
     return {
       success: true,
       data: product,
+    };
+  }
+
+  @Patch(':id')
+  updateProduct(@Param('id') id: string, @Body() body: { name: string }) {
+    return {
+      success: true,
+      data: this.productsService.updateProduct(Number(id), body),
+    };
+  }
+
+  @Delete(':id')
+  deleteProduct(@Param('id') id: string) {
+    return {
+      success: true,
+      data: this.productsService.deleteProduct(Number(id)),
     };
   }
 }
