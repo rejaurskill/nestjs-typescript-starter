@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { CreateProductDto } from './dto/create-product.dto.js';
+import { UpdateProductDto } from './dto/update-product.dto.js';
 
 @Injectable()
 export class ProductsService {
@@ -21,7 +23,7 @@ export class ProductsService {
     return this.products.find((product) => product.id === id);
   }
 
-  createProduct(body: { name: string }) {
+  createProduct(body: CreateProductDto) {
     const newProduct = {
       id: this.products.length + 1,
       name: body.name,
@@ -31,7 +33,8 @@ export class ProductsService {
 
     return newProduct;
   }
-  updateProduct(id: number, body: { name: string }) {
+
+  updateProduct(id: number, body: UpdateProductDto) {
     const product = this.products.find((product) => product.id === id);
 
     if (!product) {
